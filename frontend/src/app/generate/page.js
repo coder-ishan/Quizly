@@ -1,14 +1,16 @@
 "use client"
 import Logo from '@/components/logo';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export default function GeneratePage(){
+    const Router = useRouter();
     const [files, setFiles] = useState([]);
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
     const [numQuestions, setNumQuestions] = useState(5);
     const [difficulty, setDifficulty] = useState('easy');
-
+   
     const handleFileChange = (e) => {
         setFiles([...e.target.files]);
     };
@@ -32,15 +34,12 @@ export default function GeneratePage(){
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-        window.location.href = '/attempt/' + "sampleQuizId";
         const formData = new FormData();
         files.forEach(file => formData.append('files', file));
         formData.append('tags', JSON.stringify(tags));
         formData.append('numQuestions', numQuestions);
         formData.append('difficulty', difficulty);
-
         try {
             const response = await fetch('YOUR_API_ENDPOINT', {
                 method: 'POST',
@@ -52,9 +51,9 @@ export default function GeneratePage(){
             }
 
             const result = await response.json();
-            
-            
-            
+            const quizId = result.quizId; // Assuming the API returns a quizId
+            Router.push(`/attempt/${quizId}`);
+           
             console.log('Success:', result);
         } catch (error) {
             console.error('Error:', error);
@@ -62,18 +61,21 @@ export default function GeneratePage(){
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
             
             <Logo />
-            <h1 className="text-4xl font-bold mb-6">Quiz Smarter, Learn Faster</h1>
-            <div className="flex flex-row items-center mb-6">
-                <form onSubmit={handleSubmit} className="w-full max-w-lg mr-6 ml-6">
+            <h1 className="text-4xl font-bold mb-6 text-center">Quiz Smarter, Learn Faster</h1>
+            <div className="flex flex-col md:flex-row items-center mb-6 w-full">
+                <form onSubmit={handleSubmit} className="w-full max-w-lg mr-0 md:mr-6 ml-0 md:ml-6">
                     <div className="mb-4">
-                        <label htmlFor="fileUpload" className="block text-gray-700 text-lg">Upload your documents:</label>
+                        <label htmlFor="fileUpload" className="block text-gray-700 text-lg">Upload your documents: 
+                            <span className="text-red-500">*</span>
+                            </label>
                         <input
                             type="file"
                             id="fileUpload"
                             accept='.pdf'
+                            required
                             multiple
                             onChange={handleFileChange}
                             className="mt-2 p-2 border border-gray-300 rounded w-full"
@@ -100,9 +102,12 @@ export default function GeneratePage(){
                     </div>
                    
                     <div className="mb-4">
-                        <label htmlFor="numQuestions" className="block text-gray-700 text-lg">Number of Questions:</label>
+                        <label htmlFor="numQuestions" className="block text-gray-700 text-lg">Number of Questions:
+                        <span className="text-red-500">*</span>
+                        </label>
                         <select
                             id="numQuestions"
+                            required
                             className="mt-2 p-2 border border-gray-300 rounded w-full"
                             onChange={(e) => setNumQuestions(e.target.value)}
                         >
@@ -133,32 +138,30 @@ export default function GeneratePage(){
                     <button type="submit" className="p-2 bg-green-500 text-white rounded w-full">Generate my personal Quiz</button>
                 </form>
                 
-                <div className="flex flex-col items-center w-1/2 h-max">
-                    <div className="flex flex-col items-center w-1/2-auto h-1/2 bg-gray-200 p-4 rounded-lg shadow-md ml-6">
+                <div className="flex flex-col items-center w-full md:w-1/2 h-max mt-6 md:mt-0">
+                    <div className="flex flex-col items-center w-full bg-gray-200 p-4 rounded-lg shadow-md">
                         <h2 className="text-xl mb-4">How it works</h2>
-                        <h3 className="text-lg mb-4">Add the single/multiple files and up to 5 topics you want to generate your quiz for (Leave empty if you want a quiz from the whole document), select difficulty and number of questions and you are good to go</h3>
+                        <h3 className="text-lg mb-4 text-center">Add the single/multiple files and up to 5 topics you want to generate your quiz for (Leave empty if you want a quiz from the whole document), select difficulty and number of questions and you are good to go</h3>
                     </div>
-                    <div>
-                    <div className="flex flex-col items-center w-1/2-auto h-1/2 bg-gray-200 p-4 rounded-lg shadow-md mt-8">
+                    <div className="flex flex-col items-center w-full bg-gray-200 p-4 rounded-lg shadow-md mt-8">
                         <label htmlFor="tagInput" className="block text-gray-700 text-lg">My Quiz should focus on:</label>
                         <div className="mt-8">
-                                <div className="flex flex-wrap">
-                                    {tags.map((tag, index) => (
-                                        <div key={index} className="flex items-center mb-2 mr-2">
-                                            <span className="bg-gray-400 text-gray-700 p-2 rounded">{tag}</span>
-                                            <button
-                                                type="button"
-                                                onClick={() => removeTag(index)}
-                                                className="ml-2 p-2 bg-red-500 text-white rounded h-6 w-6 flex items-center justify-center"
-                                            >
-                                                X
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
+                            <div className="flex flex-wrap">
+                                {tags.map((tag, index) => (
+                                    <div key={index} className="flex items-center mb-2 mr-2">
+                                        <span className="bg-gray-400 text-gray-700 p-2 rounded">{tag}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => removeTag(index)}
+                                            className="ml-2 p-2 bg-red-500 text-white rounded h-6 w-6 flex items-center justify-center"
+                                        >
+                                            X
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
