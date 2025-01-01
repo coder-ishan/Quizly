@@ -1,0 +1,62 @@
+[
+  {
+    "question": "Where did Mahatma Gandhi return to in January 1915?",
+    "options": [
+      "India",
+      "South Africa",
+      "Transvaal",
+      "Newcastle"
+    ],
+    "correct_answer": 0,
+    "explanation": "According to the context, Mahatma Gandhi returned to India in January 1915.",
+    "context_reference": "Mahatma Gandhi returned to India in January 1915."
+  },
+  {
+    "question": "What did Mahatma Gandhi fight against in South Africa?",
+    "options": [
+      "Racist laws",
+      "Economic inequality",
+      "Political suppression",
+      "Social injustice"
+    ],
+    "correct_answer": 0,
+    "explanation": "According to the context, Mahatma Gandhi fought against racist laws that denied rights to non-whites.",
+    "context_reference": "that denied rights to non-whites."
+  },
+  {
+    "question": "What event led to Mahatma Gandhi being joined by thousands of workers?",
+    "options": [
+      "His arrest",
+      "His return to India",
+      "His arrival in South Africa",
+      "His march through Transvaal"
+    ],
+    "correct_answer": 0,
+    "explanation": "According to the context, Mahatma Gandhi was arrested and thousands of more workers joined the satyagraha against racist laws.",
+    "context_reference": "When the marchers were stopped and Gandhiji arrested,"
+  },
+  {
+    "question": "What did Mahatma Gandhi lead the workers in South Africa from in 1913?",
+    "options": [
+      "Newcastle",
+      "Transvaal",
+      "Volksrust",
+      "India"
+    ],
+    "correct_answer": 1,
+    "explanation": "According to the context, Mahatma Gandhi was leading the workers from Newcastle to Transvaal in 1913.",
+    "context_reference": "workers from Newcastle to Transvaal."
+  },
+  {
+    "question": "What was the name of the event that Mahatma Gandhi was part of in South Africa?",
+    "options": [
+      "Sabotage",
+      "Satyagraha",
+      "March",
+      "Protest"
+    ],
+    "correct_answer": 2,
+    "explanation": "According to the context, Mahatma Gandhi was leading the satyagraha against racist laws.",
+    "context_reference": "the satyagraha against racist laws"
+  }
+]

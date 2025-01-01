@@ -12,12 +12,14 @@ client = OpenAI(
 	base_url="https://api-inference.huggingface.co/v1/",
 	api_key= os.getenv("HF_API")
 )
+
 def generateQuestions(query):
 	context = pdfParser.getContext(query)
 	messages = [
 		{
 			"role": "user",
-			"content": f"""Generate EXACTLY 5 multiple choice questions that are STRICTLY derived from the following context:
+			"content": f"""
+			Generate EXACTLY 5 multiple choice questions that are STRICTLY derived from the following context:
 
 			{context} """
 			+
@@ -60,10 +62,55 @@ def generateQuestions(query):
 	return completion.choices[0].message.content
 
 
-result = generateQuestions("Mahatma Gandhi")
+
+
+
+import json
+import re
+
+def extract_json_from_output(output_text):
+    """
+    Extracts and cleans JSON from a block of text that contains random text
+    surrounding a JSON snippet enclosed by Markdown-style code fences.
+
+    Parameters:
+    - output_text (str): The text containing the JSON snippet.
+
+    Returns:
+    - dict or list: The parsed JSON object, either as a dictionary or a list.
+
+    Raises:
+    - ValueError: If no JSON object can be found or if the JSON is malformed.
+    """
+    # Define a regular expression pattern to find JSON enclosed in backticks
+    pattern = r"```json\s*([\s\S]*?)\s*```"
+
+    # Search for the JSON block using the pattern
+    match = re.search(pattern, output_text)
+
+    if not match:
+        raise ValueError("No searchable JSON block found in the text.")
+
+    # Extract the JSON string
+    json_str = match.group(1).strip()
+
+    # Parse the JSON string into a Python object
+    try:
+        parsed_json = json.loads(json_str)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"JSON parsing error: {e}")
+
+    return parsed_json
+
+
+result = extract_json_from_output(generateQuestions("Mahatma Gandhi"))
 print(result)
 
-with open('result.txt', 'w', encoding='utf-8') as file:
+with open('result.json', 'w', encoding='utf-8') as file:
        file.write(json.dumps(result, indent=2))
+
+
+
+
 
 
