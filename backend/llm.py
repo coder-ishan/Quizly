@@ -1,9 +1,11 @@
+from typing import List
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
 import pdfParser
-
+from pydantic import BaseModel, ValidationError
 import json
+
 load_dotenv()
 
 client = OpenAI(
@@ -39,14 +41,14 @@ def generateQuestions(query):
 			]
 
 			Validation:
-            - Output must be a complete valid JSON string
+            - Output must be JSON
 			- Questions must be unique
 			- Options must be distinct from each other
 			- Explanation must reference specific content from context
 			- All text fields must be non-empty strings
 			- correct_answer must be 0, 1, 2, or 3
 			"""
-		}
+		},
 	]
 
 	completion = client.chat.completions.create(
@@ -57,26 +59,11 @@ def generateQuestions(query):
 
 	return completion.choices[0].message.content
 
-def parse_quiz_json(input_string):
-    
-    start_marker = "```"
-    end_marker = "```"
-    
-    start_index = input_string.find(start_marker) + len(start_marker)
-    end_index = input_string.rfind(end_marker)
-    
-    if start_index == -1 or end_index == -1:
-        raise ValueError("Invalid Output")
-    
-    json_str = input_string[start_index:end_index].strip()
-    try:
-        parsed_data = json.loads(json_str)
-        return parsed_data
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Failed to parse JSON: {str(e)}")
 
-result = parse_quiz_json(generateQuestions("Raja Ravi Verma"))
+result = generateQuestions("Mahatma Gandhi")
 print(result)
 
-with open('result.json', 'w', encoding='utf-8') as file:
-        json.dump(result, file, indent=2, ensure_ascii=False)
+with open('result.txt', 'w', encoding='utf-8') as file:
+       file.write(json.dumps(result, indent=2))
+
+
