@@ -1,5 +1,5 @@
 "use client"
-import Logo from "@/components/logo";
+import Logo from "@/components/Navbar";
 import Question from "@/components/question";
 
 
