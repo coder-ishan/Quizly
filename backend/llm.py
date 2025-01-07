@@ -14,9 +14,35 @@ client = OpenAI(
 	api_key= os.getenv("HF_API")
 )
 
+
+def extract_json_from_output(output_text):
+
+    json_specific_pattern = r"```json\n([\s\S]*?)\n```"  
+    generic_fence_pattern = r"```[\s\S]*?({[\s\S]*?}|\[[\s\S]*?\])[\s\S]*?```"  
+    
+    
+    match = re.search(json_specific_pattern, output_text)
+    
+    
+    if not match:
+        match = re.search(generic_fence_pattern, output_text)
+    
+    if not match:
+        raise ValueError("No JSON block found in the text.")
+    
+    json_str = match.group(1).strip()
+    
+    try:
+        parsed_json = json.loads(json_str)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"JSON parsing error: {e}\nExtracted JSON string:\n{json_str}")
+    
+    return parsed_json
+
+
 def generateQuestions(query,id):
 	context =  pdfParser.getContext(query,id)
-   
+	
 	messages = [
 		{
 			"role": "user",
@@ -60,43 +86,6 @@ def generateQuestions(query,id):
 		max_tokens=1000
 	)
 
-	return completion.choices[0].message.content
-
-
-
-def extract_json_from_output(output_text):
-
-    json_specific_pattern = r"```json\n([\s\S]*?)\n```"  
-    generic_fence_pattern = r"```[\s\S]*?({[\s\S]*?}|\[[\s\S]*?\])[\s\S]*?```"  
-    
-    
-    match = re.search(json_specific_pattern, output_text)
-    
-    
-    if not match:
-        match = re.search(generic_fence_pattern, output_text)
-    
-    if not match:
-        raise ValueError("No JSON block found in the text.")
-    
-    json_str = match.group(1).strip()
-    
-    try:
-        parsed_json = json.loads(json_str)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"JSON parsing error: {e}\nExtracted JSON string:\n{json_str}")
-    
-    return parsed_json
-
-result = extract_json_from_output(generateQuestions("Ravi Verma","bvdsadasr"))
-print(result)
-
-
-with open('result.json', 'w', encoding='utf-8') as file:
-       file.write(json.dumps(result, indent=2))
-
-
-
-
+	return  extract_json_from_output(completion.choices[0].message.content)
 
 

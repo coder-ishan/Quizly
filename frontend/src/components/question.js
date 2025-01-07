@@ -13,17 +13,18 @@ export default function Question({ QuestionNo = 1, Question = '', Options = [], 
     const [correct,setCorrect] = useState(0);
     const [incorrect,setIncorrect] = useState(0);
 
-    function handleSolving(index,correctAnswer) {
-        var ca = document.getElementById(`${QuestionNo}-${correctAnswer}`).style.backgroundColor = 'green';
+    function handleSolving(index, correctAnswer) {
         setSolved(true);
         if (index === correctAnswer) {
-            setCorrect(correct+1);  
-            
+            setCorrect(correct + 1);
+            document.getElementById(`${QuestionNo}-${correctAnswer}`).style.backgroundColor = 'green';
         } else {
-            setIncorrect(incorrect+1);
+            setIncorrect(incorrect + 1);
             document.getElementById(`${QuestionNo}-${index}`).style.backgroundColor = 'red';
+            document.getElementById(`${QuestionNo}-${correctAnswer}`).style.backgroundColor = 'green';
         }
     }
+    
     
     return (
         <div>
@@ -37,7 +38,7 @@ export default function Question({ QuestionNo = 1, Question = '', Options = [], 
                         {Options.map((option, index) => (
                             <div key={index} id={`${QuestionNo}-${index}`} className="card flex flex-row items-center bg-white shadow-lg rounded-xl w-full h-16 ml-4" style={{ marginTop: '10px', cursor: 'pointer', padding: '20px' }} onClick={() => solved==false ? handleSolving(index.toString(), correctAnswer) : ()=>{}}>
                                 <div className="flex items-center justify-center bg-gray-200 h-8 w-8 rounded-md">{index + 1}</div>
-                                <div className='ml-4 flex items-center justify-center bg-white-200 h-full w-64 break-words'  style={{ padding: '20px', textAlign: 'center' }}>{option}</div>
+                                <div className='ml-4 flex items-center justify-center bg-white-200 h-full w-96 break-words'  style={{ padding: '20px', textAlign: 'center' }}>{option}</div>
                             </div>
                         ))}
                     </div>
