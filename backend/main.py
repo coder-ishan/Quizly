@@ -1,5 +1,6 @@
 from typing import List
 from typing_extensions import Annotated
+from llm import generateQuestions
 from database import engine
 from fastapi import Depends, FastAPI, UploadFile, File
 from sqlalchemy.orm import Session
@@ -9,6 +10,7 @@ import models, schemas
 from database import engine, get_db
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 #uvicorn main:app --host localhost --port 8080
 
 
@@ -23,19 +25,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class FormData(BaseModel):
+    id: int
+    tags: List[str]
+    numQuestions: int
+    difficulty: str
 
-"""
 @app.post("/generatequestions/")
-async def generate_questions(form_data: Annotated[dict, Depends()]):
-    query = form_data.get('tag')
-    id = form_data.get('id')
+def generate_questions(form_data: FormData):
+    query = form_data.tag
+    id = form_data.id
     return generateQuestions(query, id)
-
-
-"""
-
-
-
 
 @app.post("/createquizzes/", response_model=schemas.Quiz)
 def create_quiz(quiz: schemas.QuizCreate, db: Session = Depends(get_db)):

@@ -58,6 +58,7 @@ def generateQuestions(query,id):
 			3. Each question must have exactly 4 options
 			4. All options must be plausible and related to the context
 			5. Exactly one option must be correct
+            6. do not miss "," in JSON structure
 
 			Output Schema:
 			[

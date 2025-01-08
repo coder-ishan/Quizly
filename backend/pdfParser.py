@@ -1,7 +1,5 @@
 import chromadb
 from uuid import uuid4
-from concurrent.futures import ThreadPoolExecutor
-from tqdm import tqdm  
 from langchain.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
