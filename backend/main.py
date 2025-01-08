@@ -1,8 +1,8 @@
 from typing import List
-from sqlalchemy import UUID
 from typing_extensions import Annotated
+from llm import generateQuestions
 from database import engine
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, UploadFile, File
 from sqlalchemy.orm import Session
 import models
 from database import SessionLocal
@@ -10,7 +10,6 @@ import models, schemas
 from database import engine, get_db
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from llm import generateQuestions
 #uvicorn main:app --host localhost --port 8080
 
 
@@ -25,11 +24,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+"""
 @app.post("/generatequestions/")
 async def generate_questions(form_data: Annotated[dict, Depends()]):
     query = form_data.get('tag')
     id = form_data.get('id')
     return generateQuestions(query, id)
+
+
+"""
+
 
 
 

@@ -41,7 +41,7 @@ export default function QuizPage({params}) {
        
 
     }
-    console.log(quiz);
+    console.log("Hello");
 
     
     return (
