@@ -1,6 +1,36 @@
+version: '3.8'
+
 services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ABCD1234
+      POSTGRES_DB: quizzlyDB
+    depends_on:
+      - db
+
   frontend:
     build:
       context: ./frontend
     ports:
       - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ABCD1234
+      POSTGRES_DB: quizzlyDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

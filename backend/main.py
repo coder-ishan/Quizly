@@ -1,6 +1,5 @@
 from typing import List
 from typing_extensions import Annotated
-from llm import generateQuestions
 from database import engine
 from fastapi import Depends, FastAPI, UploadFile, File
 from sqlalchemy.orm import Session

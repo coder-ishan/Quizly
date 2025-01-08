@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # Set the working directory in the container
 WORKDIR /app
@@ -17,22 +17,4 @@ COPY . .
 EXPOSE 8080
 
 # Command to run the FastAPI application
-CMD ["uvicorn", "main:app", "--host", "localhost", "--port", "8080"]
-
-# Add Chroma server setup
-RUN apt-get update && apt-get install -y \
-    chroma-server
-
-# Add PostgreSQL setup
-RUN apt-get install -y postgresql postgresql-contrib
-
-# Set environment variables for PostgreSQL
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=ABCD1234
-ENV POSTGRES_DB=quizzlyDB
-
-# Start PostgreSQL service
-RUN service postgresql start
-
-# Expose the PostgreSQL port
-EXPOSE 5432
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

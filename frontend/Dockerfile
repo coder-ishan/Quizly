@@ -1,5 +1,5 @@
 # Use the official Node.js 16 image as the base image
-FROM node:16-alpine
+FROM node:19-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the Next.js application
-RUN npm run dev
+RUN npm run build
 
 # Expose the port the app runs on
 EXPOSE 3000
