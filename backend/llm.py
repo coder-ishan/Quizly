@@ -15,7 +15,7 @@ client = OpenAI(
 )
 
 
-def extract_json_from_output(output_text):
+async def extract_json_from_output(output_text):
 
     json_specific_pattern = r"```json\n([\s\S]*?)\n```"  
     generic_fence_pattern = r"```[\s\S]*?({[\s\S]*?}|\[[\s\S]*?\])[\s\S]*?```"  
@@ -40,8 +40,8 @@ def extract_json_from_output(output_text):
     return parsed_json
 
 
-def generateQuestions(query,id):
-	context =  pdfParser.getContext(query,id)
+async def generateQuestions(query,id):
+	context = pdfParser.getContext(query,id)
 	
 	messages = [
 		{
@@ -87,6 +87,6 @@ def generateQuestions(query,id):
 		max_tokens=1000
 	)
 
-	return  extract_json_from_output(completion.choices[0].message.content)
+	return await extract_json_from_output(completion.choices[0].message.content)
 
 
