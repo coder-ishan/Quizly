@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose the port ChromaDB is running on
-EXPOSE 8000
+EXPOSE 8001
 
 # Command to run the ChromaDB application
-CMD ["chroma", "run"]
+CMD ["chroma", "run","--host", "", "--port", "8001"]

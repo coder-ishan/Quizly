@@ -1,16 +1,19 @@
 import chromadb
 from uuid import uuid4
-from langchain.document_loaders import PyMuPDFLoader
+from langchain_community.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
 def getContext(query, id):
     print("Creating collection...")
-
+    
     chroma_client  = chromadb.HttpClient(
-        host="localhost",
-        port=8000
+        host="chromadb",
+        port=8001
     )
+    
+    chroma_client.heartbeat()
+
     collection = chroma_client.create_collection(f"{id}")
 
     print("Loading and parsing document...")

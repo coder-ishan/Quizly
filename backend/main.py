@@ -1,3 +1,5 @@
+import datetime
+from http.client import HTTPException
 from typing import List
 from typing_extensions import Annotated
 from llm import generateQuestions
@@ -8,9 +10,12 @@ import models
 from database import SessionLocal
 import models, schemas
 from database import engine, get_db
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+import logging
+import aiofiles
+import os
+import uuid
 #uvicorn main:app --host localhost --port 8080
 
 
@@ -19,23 +24,39 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Adjust this to the specific origins you want to allow
+    allow_origins=["http://localhost:3000", "http://0.0.0.0:8080/"],  # Adjust this to the specific origins you want to allow
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-class FormData(BaseModel):
-    id: int
-    tags: List[str]
-    numQuestions: int
-    difficulty: str
+
+
+@app.get("/")
+def read_root():
+    return {"quizId":1}
+
 
 @app.post("/generatequestions/")
-def generate_questions(form_data: FormData):
-    query = form_data.tag
-    id = form_data.id
-    return generateQuestions(query, id)
+async def generate_questions(
+    tags: List[str] = Form(...),
+    numQuestions: int = Form(...),
+    difficulty: str = Form(...),
+    files: List[UploadFile] = File(None),
+):
+    query = " ".join(tags)
+    quizId = uuid.uuid4()
+    
+    await generateQuestions(query, quizId)
+    os.makedirs(f"uploads/{quizId}", exist_ok=True)
+    
+    if files:
+        for file in files:
+            async with aiofiles.open(f"uploads/{quizId}/{file.filename}", "wb") as buffer:
+                content = await file.read()
+                await buffer.write(content)
+    
+    return {"quizId": quizId}
 
 @app.post("/createquizzes/", response_model=schemas.Quiz)
 def create_quiz(quiz: schemas.QuizCreate, db: Session = Depends(get_db)):

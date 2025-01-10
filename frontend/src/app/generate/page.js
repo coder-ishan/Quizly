@@ -42,10 +42,11 @@ export default function GeneratePage(){
         formData.append('numQuestions', numQuestions);
         formData.append('difficulty', difficulty);
         try {
-            const response = await fetch('YOUR_API_ENDPOINT', {
+            const response = await fetch('http://127.0.0.1:8080/generatequestions/', {
+                body: formData,
                 method: 'POST',
-                body: formData
-            });
+               
+            }); 
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
