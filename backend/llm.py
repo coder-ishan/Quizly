@@ -116,7 +116,7 @@ async def generateQuestions(query, quizId, numQuestions, difficulty, files):
 		completion = client.chat.completions.create(
 			model="llama-3.3-70b-specdec",
 			messages=messages,
-			max_tokens=1024,
+			max_tokens=6000,
 			temperature=1,
 			response_format={"type": "json_object"},
 			top_p=1,
