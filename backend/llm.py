@@ -114,7 +114,7 @@ async def generateQuestions(query, quizId, numQuestions, difficulty, files):
 	print("Generating question now...")
 	try:
 		completion = client.chat.completions.create(
-			model="llama-3.3-70b-specdec",
+			model="llama-3.1-70b-versatile",
 			messages=messages,
 			max_tokens=6000,
 			temperature=1,
