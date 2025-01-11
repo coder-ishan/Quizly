@@ -4,11 +4,7 @@ from langchain_community.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import multiprocessing as mp
 
-def producer(queue, id):
-    print("Loading and parsing document...")
-    loader = PyMuPDFLoader("Samples/test.pdf")
-    docs = loader.load()
-
+def producer(queue, id,docs):
     print("Splitting text semantically...")
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
@@ -51,10 +47,10 @@ def consumer(queue, id):
             ids=batch[1],
         )
 
-def getContext(query, id):
+def getContext(query, id, docs):
     queue = mp.Queue()
 
-    producer_process = mp.Process(target=producer, args=(queue, id))
+    producer_process = mp.Process(target=producer, args=(queue, id,docs))
     consumer_process = mp.Process(target=consumer, args=(queue, id))
 
     producer_process.start()
@@ -76,4 +72,4 @@ def getContext(query, id):
 
     print("Result documents:")
     print(result["documents"])
-    return result["documents"]
+    return result["documents"][0][0]

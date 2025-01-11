@@ -47,7 +47,8 @@ async def generate_questions(
     query = " ".join(tags)
     quizId = uuid.uuid4()
     
-    await generateQuestions(query, quizId)
+    await generateQuestions(query, quizId,numQuestions,difficulty,files)
+    
     os.makedirs(f"uploads/{quizId}", exist_ok=True)
     
     if files:
