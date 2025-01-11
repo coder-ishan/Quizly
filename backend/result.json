@@ -1,62 +1,16 @@
-[
-  {
-    "question": "Who tried to develop a style of painting that could be seen as truly Indian?",
-    "options": [
-      "Abanindranath Tagore",
-      "Ravi Varma",
-      "Jawaharlal Nehru",
-      "Bharat Mata"
-    ],
-    "correct_answer": 0,
-    "explanation": "Abanindranath Tagore, like Ravi Varma before him, tried to develop a style of painting that could be seen as truly Indian.",
-    "context_reference": "Abanindranath Tagore, like Ravi Varma before him, tried to develop a style of painting that could be seen as truly Indian."
-  },
-  {
-    "question": "Why was the map of India shown close to Jawaharlal Nehru's heart in Figure 13?",
-    "options": [
-      "To depict his strong nationalistic views",
-      "To show his loyalty to Bharat Mata",
-      "To emphasize the importance of India on his person",
-      "To display his favorite sports team"
-    ],
-    "correct_answer": 2,
-    "explanation": "Nehru is here shown holding the image of Bharat Mata and the map of India close to his heart.",
-    "context_reference": "Nehru is here shown holding the image of Bharat Mata and the map of India close to his heart."
-  },
-  {
-    "question": "What was the idea of satyagraha according to the context?",
-    "options": [
-      "A novel method of mass agitation to fight the oppressor using physical force",
-      "A satyagrahi could win the battle through non-violent means and truth",
-      "A form of nationalist law",
-      "A campaign to stop the racist regime"
-    ],
-    "correct_answer": 1,
-    "explanation": "The idea of satyagraha emphasised the power of truth and the need to search for truth.",
-    "context_reference": "The idea of satyagraha emphasised the power of truth and the need to search for truth."
-  },
-  {
-    "question": "How did nationalist leaders like Jawaharlal Nehru often show their devotion to Bharat Mata?",
-    "options": [
-      "By giving her a bunch of flowers",
-      "By offering their heads to her",
-      "By holding her image close to their heart",
-      "By singing patriotic songs about her"
-    ],
-    "correct_answer": 2,
-    "explanation": "In a lot of popular prints, nationalist leaders are shown offering their heads to Bharat Mata.",
-    "context_reference": "In a lot of popular prints, nationalist leaders are shown offering their heads to Bharat Mata."
-  },
-  {
-    "question": "What did Abanindranath Tagore try to create in his painting style?",
-    "options": [
-      "A style that blended Indian paintings with traditional techniques",
-      "A style that imitated Western art",
-      "A style that could be seen as truly Indian",
-      "A style that focused on realistic depictions"
-    ],
-    "correct_answer": 3,
-    "explanation": "Abanindranath Tagore, like Ravi Varma before him, tried to develop a style of painting that could be seen as truly Indian.",
-    "context_reference": "Abanindranath Tagore, like Ravi Varma before him, tried to develop a style of painting that could be seen as truly Indian."
-  }
-]
+{
+  "questions": [
+      {
+        "question": "What was the Rowlatt Act?",
+        "options": [
+          "A law that gave the government the power to repress political activities",
+          "A tax on Indian farmers",
+          "A law that allowed free speech for Indians",
+          "A law that protected the rights of women in India"
+      ],
+      "correct_answer": 0,
+      "explanation": "The Rowlatt Act was a law that gave the government the power to repress political activities.",
+      "context_reference": "It gave the government enormous powers to repress political activities,"
+    }
+  ]
+}

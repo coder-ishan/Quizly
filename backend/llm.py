@@ -86,7 +86,7 @@ async def generateQuestions(query, quizId, numQuestions, difficulty, files):
 			* `question`: The complete question text
 			* `options`: Exactly 4 options
 			* `correct_answer`: 0-based index of the correct option (0-3)
-			* `explanation`: Explanation citing specific evidence from the context
+			* `explanation`: Explanation citing specific evidence from the context but do not mention "context"
 			* `context_reference`: The exact quote from the context supporting the answer
 
 			Please ensure that the questions are unique, unbiased, and unambiguous. The options should be plausible and the correct answer should be objectively verifiable using the context provided. Also, please make sure that the questions and options do not include any unrelated or misleading information.
@@ -107,14 +107,14 @@ async def generateQuestions(query, quizId, numQuestions, difficulty, files):
 			]
 			
 
-			Please generate the questions in the same format as the example above. Thank you!
+			Please generate the questions in the given format as the example above. Thank you!
 			""",
 		},
 	]
 	print("Generating question now...")
 	try:
 		completion = client.chat.completions.create(
-			model="mixtral-8x7b-32768",
+			model="llama-3.3-70b-specdec",
 			messages=messages,
 			max_tokens=1024,
 			temperature=1,
