@@ -1,5 +1,6 @@
 import datetime
 from http.client import HTTPException
+import json
 from typing import List
 from typing_extensions import Annotated
 from llm import generateQuestions
@@ -45,9 +46,9 @@ async def generate_questions(
     files: List[UploadFile] = File(None),
 ):
     query = " ".join(tags)
-    quizId = uuid.uuid4()
+    quizId = str(uuid.uuid4())
     
-    await generateQuestions(query, quizId,numQuestions,difficulty,files)
+    questions =  await generateQuestions(query, quizId,numQuestions,difficulty,files)
     
     os.makedirs(f"uploads/{quizId}", exist_ok=True)
     
@@ -56,7 +57,16 @@ async def generate_questions(
             async with aiofiles.open(f"uploads/{quizId}/{file.filename}", "wb") as buffer:
                 content = await file.read()
                 await buffer.write(content)
-    
+
+    db = SessionLocal()
+    try:
+        question_json = json.loads(questions)
+        question_json["quizId"] = str(quizId)
+        
+        quiz_schema = schemas.QuizCreate(**question_json)
+        create_quiz(quiz=quiz_schema, db=db)
+    finally:
+        db.close()
     return {"quizId": quizId}
 
 @app.post("/createquizzes/", response_model=schemas.Quiz)
@@ -73,7 +83,7 @@ def read_quizzes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
     return quizzes
 
 @app.get("/quizzes/{quiz_id}", response_model=schemas.Quiz)
-def read_quiz(quiz_id: int, db: Session = Depends(get_db)):
+def read_quiz(quiz_id: str, db: Session = Depends(get_db)):
     db_quiz = db.query(models.Quiz).filter(models.Quiz.quizId == quiz_id).first()
     if db_quiz is None:
         raise HTTPException(status_code=404, detail="Quiz not found")

@@ -54,7 +54,7 @@ export default function GeneratePage(){
 
             const result = await response.json();
             const quizId = result.quizId; 
-            Router.push(`/attempt/${quizId}`);
+            Router.push(`/attempt/quiz/${quizId}`);
            
             console.log('Success:', result);
         } catch (error) {

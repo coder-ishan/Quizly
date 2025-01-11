@@ -8,14 +8,12 @@ from pydantic import BaseModel, ValidationError
 import json
 import re
 from langchain_community.document_loaders import PyMuPDFLoader
-from jsonformer import Jsonformer
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from groq import Groq
 
 load_dotenv()
 
-client = OpenAI(
-	base_url="https://api-inference.huggingface.co/v1/",
-	api_key= os.getenv("HF_API")
+client  = Groq(
+    api_key=os.environ.get("GROQ_API"),
 )
 
 
@@ -35,13 +33,13 @@ async def extract_json_from_output(output_text):
         raise ValueError("No JSON block found in the text.")
     
     try:
-        parsed_json = json.loads(match)
+        parsed_json = json.loads(match.group(0))
     except json.JSONDecodeError as e:
         print(f"JSONDecodeError: {e}")
         return [
-				{{
+				{
 					"status": "error",
-				}}
+				}
 				]
     
     return parsed_json
@@ -72,55 +70,62 @@ async def generateQuestions(query, quizId, numQuestions, difficulty, files):
 		else:
 			print(f"File {file_path} is empty.")
 		
-		print("Context:")
+		print("Context:") 
 		print(context)
 	messages = [
 		{
 			"role": "user",
-			"content": f"""
-			   
-			Generate EXACTLY {numQuestions} multiple choice questions with {difficulty} difficulty level that are STRICTLY derived from the following context:
+			"content": f"""You are a helpful assistant that generates multiple choice questions from a given context. Please generate {numQuestions} multiple choice questions with {difficulty} difficulty level that are strictly derived from the following context:
 
-			{context} on query related to {query} """
-			+
-			"""
-			Requirements:
-			1. Each question must be explicitly supported by information present in the context
-			2. Do not introduce any external information or assumptions
-			3. Each question must have exactly 4 options
-			4. All options must be plausible and related to the context
-			5. Exactly one option must be correct
-			6. Return in valid JSON format schema
+			{context}
 
-			Output Schema:
+			The questions should be related to the query: {query}
+
+			The format of the response should be a List of JSON objects, where each object contains the following keys:
+
+			* `question`: The complete question text
+			* `options`: Exactly 4 options
+			* `correct_answer`: 0-based index of the correct option (0-3)
+			* `explanation`: Explanation citing specific evidence from the context
+			* `context_reference`: The exact quote from the context supporting the answer
+
+			Please ensure that the questions are unique, unbiased, and unambiguous. The options should be plausible and the correct answer should be objectively verifiable using the context provided. Also, please make sure that the questions and options do not include any unrelated or misleading information.
+		"""
+            +
+            """
+			Here's an example of a valid response for one question:
+
+			
 			[
 				{
-					"question": str,  # The complete question text
-					"options": list[str],  # Exactly 4 options
-					"correct_answer": int,  # 0-based index of correct option (0-3)
-					"explanation": str,  # Explanation citing specific evidence from context
-					"context_reference": str  # The exact quote from context supporting the answer
-				}
+					"question": String,
+					"options": [String, String, String, String],
+					"correct_answer": Integer,
+					"explanation": String,
+					"context_reference": String
+				},
 			]
+			
 
-			Validation:
-			- Output must be a valid JSON following the schema
-			- Options must be distinct from each other
-			- Explanation must reference specific content from context
-			- All text fields must be non-empty strings
-			- correct_answer must be 0, 1, 2, or 3
-			"""
+			Please generate the questions in the same format as the example above. Thank you!
+			""",
 		},
 	]
 	print("Generating question now...")
-	completion = client.chat.completions.create(
-		model="meta-llama/Llama-3.2-3B-Instruct",
-		messages=messages,
-		max_tokens=1000
-	)
-		   
-	print (completion.choices[0].message.content)
-	return extract_json_from_output(completion.choices[0].message.content)
+	try:
+		completion = client.chat.completions.create(
+			model="mixtral-8x7b-32768",
+			messages=messages,
+			max_tokens=1024,
+			temperature=1,
+			response_format={"type": "json_object"},
+			top_p=1,
+		)
+		print(completion.choices[0].message.content)
+	except Exception as e:
+		print(f"Erorr: {e}")
+	result = completion.choices[0].message.content
+	return result
     
 
 
