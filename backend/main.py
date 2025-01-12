@@ -25,7 +25,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://0.0.0.0:8080/"],  # Adjust this to the specific origins you want to allow
+    allow_origins=["https://quizly-758569121418.asia-south2.run.app/", ""],  # Adjust this to the specific origins you want to allow
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
