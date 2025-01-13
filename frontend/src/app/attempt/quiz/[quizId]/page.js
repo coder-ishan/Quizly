@@ -11,7 +11,7 @@ export default function QuizPage({params}) {
     useEffect(() => {
         const fetchQuiz = async () => {
             try {
-                const res = await axios.get(`http://localhost:8080/quizzes/${id}`);
+                const res = await axios.get(`https://quizly-758569121418.asia-south2.run.app:8080/quizzes/${id}`);
                 setQuiz(res.data);
             } catch (error) {
                 console.error("Error fetching quiz:", error);

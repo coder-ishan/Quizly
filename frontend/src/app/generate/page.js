@@ -42,7 +42,7 @@ export default function GeneratePage(){
         formData.append('numQuestions', numQuestions);
         formData.append('difficulty', difficulty);
         try {
-            const response = await fetch('http://127.0.0.1:8080/generatequestions/', {
+            const response = await fetch('https://quizly-758569121418.asia-south2.run.app:8080/generatequestions/', {
                 body: formData,
                 method: 'POST',
                
