@@ -28,8 +28,8 @@ def consumer(queue, id):
     print("Creating collection...")
     
     chroma_client = chromadb.HttpClient(
-        host="chromadb",
-        port=8001
+        host="34.131.189.237",
+        port=8000
     )
     
     chroma_client.heartbeat()

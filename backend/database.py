@@ -1,8 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+import dotenv
 
-URL_DATABASE = 'postgresql://postgres:ABCD1234@db:5432/quizzlyDB'
+URL_DATABASE= dotenv.get('URL_DATABASE')
+
 
 engine = create_engine(URL_DATABASE)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
