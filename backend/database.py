@@ -26,6 +26,7 @@ def getconn():
         user=CLOUD_SQL_USERNAME,
         password=CLOUD_SQL_PASSWORD,
         db=CLOUD_SQL_DATABASE_NAME,
+
     )
     return conn
 
