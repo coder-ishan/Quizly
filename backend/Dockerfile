@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
+# Set the PORT environment variable
+ENV PORT=9000
+
 # Expose the port FastAPI is running on
 EXPOSE 9000
 
