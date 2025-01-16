@@ -10,6 +10,12 @@ COPY requirements.txt .
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Download the cacert.pem file
+RUN curl -o /etc/ssl/certs/cacert.pem https://curl.se/ca/cacert.pem
+
+# Set the SSL_CERT_FILE environment variable
+ENV SSL_CERT_FILE=/etc/ssl/certs/cacert.pem
+
 # Copy the rest of the application code into the container
 COPY . .
 
